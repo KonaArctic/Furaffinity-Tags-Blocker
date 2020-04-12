@@ -1,0 +1,25 @@
+{
+
+	"manifest_version": 2,
+	"name": "Furaffinity Tags Blocker",
+	"version": "0.1",
+
+	"description": "",
+
+	"icons": {
+		"128": "icon-128.png"
+	},
+
+	"content_scripts": [
+		{
+			"matches": [
+				"*://www.furaffinity.net/*"
+			],
+			"js": [
+				"main.js"
+			]
+		}
+	]
+}
+
+
