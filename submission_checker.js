@@ -1,4 +1,4 @@
-// Furaffinity Tags Blocker, main. 2020 Arctic Kona. No rights reserved.
+// Furaffinity Tags Blocker, default function to check submissions. 2020 Arctic Kona. No rights reserved.
 
 //
 // Given a blocklist and submission data, returns false to block submission or true to allow. This is the function default.
@@ -13,7 +13,7 @@ async function submission_check( blocklist , submission ) {
 
 	// Checks tags
 	for ( let i = 0 ; i < submission.tags.length ; i ++ ) {
-		if ( blocklist.tags.map( v => v.toLowerCase( ) ).includes( submission.tags[ i ].toLowerCase( ) ) ) {
+		if ( blocklist.tags.map( ( tag ) => tag.toLowerCase( ) ).includes( submission.tags[ i ].toLowerCase( ) ) ) {
 			return false;
 		}
 	}

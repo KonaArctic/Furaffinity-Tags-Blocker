@@ -2,7 +2,7 @@
 
 //
 // CORS proxy
-const cors_proxy = "https://akona.me/#media/35126810#https://cors.akona.me/corsproxy/?apiurl="
+const cors_proxy = "https://cors.kona.workers.dev/corsproxy/?apiurl="
 
 //
 // For submission ID, returns an object containing an array called "tags" of tags.
