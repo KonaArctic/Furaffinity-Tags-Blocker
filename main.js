@@ -4,7 +4,7 @@
 // Dummy blocklist
 const blocklist = {
 	author: [ ] ,
-	title: [ "YCH" ] ,
+	title: [ "YCH" , "Reminder" ] ,
 	category: [ ] ,
 	subcategory: [ ] ,
 	species: [ ] ,
@@ -15,11 +15,11 @@ const blocklist = {
 
 //
 // Returns an array of for the sumbissions of the page, with possible additional information
-async function get_page_previews( ) {
+async function get_previews( ) {
 
 	// For front page
 	if ( window.location.pathname == "/" ) {
-	
+
 			// Grab submissions.
 			let page = [ ];
 			page.push( ... document.getElementById( "gallery-frontpage-submissions" ).getElementsByTagName( "figure" ) );
@@ -33,7 +33,7 @@ async function get_page_previews( ) {
 			for ( let i = 0 ; i < page.length ; i ++ ) {
 				submissions.push( {
 					element: page[ i ],
-					id: 0,
+					link: ( new URL( page[ i ].getElementsByTagName( "a" )[ 0 ].href , "https://furaffinity.net" ) ).pathname.split( "/" )[ 2 ],
 					title: page[ i ].getElementsByTagName( "figcaption" )[ 0 ].getElementsByTagName( "a" )[ 0 ].innerHTML,
 					author: page[ i ].getElementsByTagName( "figcaption" )[ 0 ].getElementsByTagName( "a" )[ 1 ].innerHTML,
 				} );
@@ -86,6 +86,16 @@ async function get_page_previews( ) {
 }
 
 //
+// Fixes structure issues on page. Currently -only for frontpage- does not work
+async function trigger_page_previews( ) {
+
+	// For front page
+	if ( window.location.pathname == "/" ) {
+		document.dispatchEvent( new Event( "resize" ) );
+	}
+}
+
+//
 // Checks if each preview on a page should be hidden
 async function check_page_previews ( blocklist ) {
 	// Empty template
@@ -100,34 +110,42 @@ async function check_page_previews ( blocklist ) {
 		description: "" ,
 	}
 
+
 	// Get list of previews
-	let previews = get_page_previews( );
+	let previews = await get_previews( );
+	
+	//FIXME: refactor
 
 	// If every field of blocklist is already informed by previews, then we do not need to fetch more information
 	if ( ! Object.keys( blocklist ).some( ( key ) => blocklist[ key ].length && ( ! previews[ 0 ][ key ] ) ) ) {
 		for ( let i = 0 ; i < previews.length ; i ++ ) {
-			let submission = { };
-			Object.keys( template ).map( ( key ) => preview[ i ][ key ] && submission[ key ] = preview[ i ][ key ] );
-			if ( ! submission_check( blocklist , submission ) ) {
-				previews[ i ].element.style.display = "hide";
+			let submission = template;
+			Object.keys( template ).map( ( key ) => previews[ i ][ key ] && ( submission[ key ] = previews[ i ][ key ] ) );
+			if ( ! check_submission( blocklist , submission ) ) {
+				previews[ i ].element.remove( );
 			}
 		}
 
 	// Otherwise, we'll have to fetch it
 	} else {
 		for ( let i = 0 ; i < previews.length ; i ++ ) {
-			0+0;
+			( async function ( ) {
+				let submission = await fetch_submission( previews[ i ].link );
+				if ( ! check_submission( blocklist , submission ) ) {
+					previews[ i ].element.remove( );
+				}
+			} )( );
 		}
 
 	}
 
 	// Trigger to fix display issues on the page
-//	trigger_page_previews( );
+	trigger_page_previews( );
 
 	return true;
 }
 
-alert( "online" );
+//alert( "online" )
 
 check_page_previews( blocklist );
 

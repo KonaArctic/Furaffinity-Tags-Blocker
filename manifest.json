@@ -16,9 +16,15 @@
 				"*://www.furaffinity.net/*"
 			],
 			"js": [
+				"api.js",
+				"submission_checker.js",
 				"main.js"
 			]
 		}
+	],
+
+	"permissions": [
+		"*://www.furaffinity.net/*"
 	]
 }
 

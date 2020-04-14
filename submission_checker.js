@@ -2,7 +2,8 @@
 
 //
 // Given a blocklist and submission data, returns false to block submission or true to allow. This is the function default.
-async function submission_check( blocklist , submission ) {
+function check_submission( blocklist , submission ) {
+
 	// Check info
 	if ( blocklist.category.includes( submission.category ) ||
 		blocklist.subcategory.includes( submission.subcategory ) ||
