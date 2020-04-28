@@ -18,13 +18,14 @@
 			"js": [
 				"api.js",
 				"submission_checker.js",
-				"main.js"
+				"content.js"
 			]
 		}
 	],
 
 	"permissions": [
-		"*://www.furaffinity.net/*"
+		"*://www.furaffinity.net/*",
+		"https://cors.kona.workers.dev/*"
 	]
 }
 
