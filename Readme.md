@@ -9,6 +9,7 @@ Screw the inflation / diaper / feet porn!
 TODO
 ----
 -	GUI
+-	Expand Readme.md
 -	Fix prefetching
 -	Code cleanup
 
