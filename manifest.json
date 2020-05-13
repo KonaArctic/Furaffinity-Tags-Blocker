@@ -1,13 +1,14 @@
 {
 
 	"manifest_version": 2,
-	"name": "Furaffinity Tags Blocker",
+
+	"name": "SFWify",
+	"description": "Block p0rn on Furaffinity",
+	"homepage_url": "https://sfwify.akona.me/",
 	"version": "0.1",
 
-	"description": "",
-
 	"icons": {
-		"128": "icon-128.png"
+		"32": "icon.png"
 	},
 
 	"content_scripts": [
@@ -25,8 +26,15 @@
 
 	"permissions": [
 		"*://www.furaffinity.net/*",
-		"https://cors.kona.workers.dev/*"
-	]
+		"https://cors.kona.workers.dev/*",
+		"https://fonts.googleapis.com/*",
+		"https://fonts.gstatic.com/*"
+	],
+
+	"browser_action": {
+		"default_icon": "icon.png",
+		"default_title": "SFWify",
+		"default_popup": "popup.html"
+	}
+
 }
-
-

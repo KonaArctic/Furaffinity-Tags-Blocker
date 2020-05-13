@@ -1,0 +1,74 @@
+<!doctype html>
+<!-- Test file -->
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<meta name="description" content=" Hello! I'm Arctic Kona, a Greenlandic arctic fox. ">
+		<meta name="author" content=" Arctic Kona ">
+		<meta name="generator" content="my paws">
+		<script src="interface.js"></script>
+		<title>🌗</title>
+
+		<!-- I hate WebDev -->
+		<style>
+			body {
+				display: grid;
+				height: 100vh;
+				width: 100vw;
+				margin-left: 0px;
+				margin-right: 0px;
+				margin-top: 0px;
+				margin-bottom: 0px;
+				background: rgba( 0 , 0 , 0 , 1.0 );
+			}
+
+			div#kona-load-circle {
+				margin-left: auto;
+				margin-right: auto;
+				margin-top: auto;
+				margin-bottom: auto;
+			}
+
+			.rotate-circle-clockwise {
+				animation-name: rotate-circle-clockwise;
+				animation-duration: 10s;
+				animation-timing-function: linear;
+				animation-iteration-count: infinite;
+			}
+
+			@keyframes rotate-circle-clockwise {
+				0% {
+					transform-origin: center center; 
+					transform: rotate( 0deg );
+				}
+				33.33333% {
+					transform-origin: center center; 
+					transform: rotate( 120deg );
+				}
+				66.66667% {
+					transform: rotate( 240deg );
+					transform-origin: center center; 
+				}
+				100% {
+					transform: rotate( 360deg );
+					transform-origin: center center; 
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<div id="kona-load-circle" height=80 width=80 >
+			<svg height="80" width="80">
+				<!-- make the circle -->
+				<circle cx="40" cy="40" r="25" stroke="white" stroke-width="1" />
+				<!-- make dots -->
+				<circle cx="40" cy="15" r="3" stroke="white" stroke-width="1" fill="white" class="rotate-circle-clockwise" style="animation-duration: 20s;" />
+				<!-- move it! move it! -->
+				<circle cx="15" cy="40" r="3" stroke="white" stroke-width="1" fill="black" class="rotate-circle-clockwise" style="animation-duration: 8s;" />
+			</svg>
+		</div>
+	</body>
+</html>
+
+

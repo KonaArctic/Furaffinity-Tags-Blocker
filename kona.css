@@ -1,0 +1,354 @@
+/* 
+   Kona Theme. 2020 Kona Arctic. No rights reserved. NO WARRANTY! https://akona.me mailto:arcticjieer@gmail.com
+   TODO:
+   *	List types not supported */
+
+/*
+   Import resources */
+@import url( "https://fonts.googleapis.com/css2?family=Quicksand:wght@300&family=Lato&display=swap" );
+
+/*
+   Site variables */
+:root {
+	/* Colours */
+	--kona-colour-primary: rgba( 127 , 225 , 255 , 1.0 );
+	--kona-colour-secondary: rgba( 255 , 150 , 150 , 1.0 );
+	--kona-colour-trinary: rgba( 255 , 255 , 127 , 1.0 );
+	--kona-colour-foreground: rgba( 255 , 255 , 255 , 1.0 );
+	--kona-colour-background: rgba( 0 , 0 , 0 , 1.0 );
+
+	/* Fonts */
+	--kona-font-size: 16px;
+	--kona-font-primary: Comfortaa, Quicksand, cursive;
+	--kona-font-secondary: Montserrat, Open Sans, sans-serif;
+	--kona-font-trinary: ;
+
+	/* Sizes */
+	--kona-size-halfary: 0.6rem;
+	--kona-size-primary: 1.2rem;
+	--kona-size-secondary: 2.4rem;
+	--kona-size-trinary: 3.6rem;
+
+	/* Transitions and animations */
+	--kona-transition-time: 0.4s;
+}
+
+/*
+   Common elements */
+
+body {
+/*	display: grid;*/
+
+	height: 100vh;
+	width: 100%;	/* Attempting to use 100vw causes [this](https://www.sitepoint.com/community/t/196480) bug */
+
+	margin-left: 0px;
+	margin-right: 0px;
+	margin-top: 0px;
+	margin-bottom: 0px;
+
+	background: var( --kona-colour-background );
+	color: var( --kona-colour-foreground );
+
+	font-size: var( --kona-font-size );
+	font-family: var( --kona-font-secondary );
+}
+
+segment , *[segment] {
+	padding-left: var( --kona-size-primary );
+	padding-top: var( --kona-size-primary );
+	padding-right: var( --kona-size-primary );
+	padding-bottom: var( --kona-size-primary );
+}
+
+segment {
+	display: block;
+}
+
+*[noblock] {
+	margin-bottom: 0px;
+}
+
+debug , *[debug] {
+	background: var( --kona-colour-foreground ) !important;
+	color: var( --kona-colour-background ) !important;
+}
+
+
+/* Headers */
+h1 , h2 , h3 , h4 , h5 , h6 , header-1 , header-2 , header-3 , header-4 , header-5 , header-6 {
+	display: block;
+
+	margin-left: 0px;
+	margin-top: 0px; /*var( --kona-size-primary ); */
+	margin-right: 0px;
+	margin-bottom: var( --kona-size-primary );
+
+	font-family: var( --kona-font-primary );
+	font-weight: bold;
+
+	color: var( --kona-colour-primary );
+}
+
+h6 , header-6 {
+	font-size: calc( var( --kona-size-primary ) + 0.2rem );
+}
+
+h5 , header-5 {
+	font-size: calc( var( --kona-size-primary ) + 0.4rem );
+}
+
+h4 , header-4 {
+	font-size: calc( var( --kona-size-primary ) + 0.8rem );
+}
+
+h3 , header-3 {
+	font-size: calc( var( --kona-size-primary ) + 1.0rem );
+}
+
+h2 , header-2 {
+	font-size: calc( var( --kona-size-primary ) + 1.4rem );
+}
+
+h1 , header-1 {
+	font-size: calc( var( --kona-size-primary ) + 1.8rem );
+}
+
+/* Hyperlinks and others*/
+a {
+	color: var( --kona-colour-secondary );
+	transition: color 0.5s;
+}
+
+a:hover , anchor:hover {
+	color: var( --kona-colour-trinary );
+	text-decoration: none;
+}
+
+p , paragraph {
+	display: block;
+
+	margin-left: 0px;
+	margin-top: 0px; /*var( --kona-size-primary ); */
+	margin-right: 0px;
+	margin-bottom: var( --kona-size-primary );
+}
+
+/* Input (HTML <input> is weird)*/
+input:not([type]) , input[type=text] , input[type=password] , input[type=email] , select {
+	border-left-width: 0px;
+	border-top-width: 0px;
+	border-right-width: 0px;
+	border-bottom-width: 2px;
+	border-bottom-style: solid;
+	border-bottom-color: var( --kona-colour-secondary );
+
+	background: rgba( 0 , 0 , 0 , 0.0 );
+	color: inherit;
+	transition: border-bottom-color var( --kona-transition-time );
+}
+
+input:not([type]):hover , input[type=text]:hover , input[type=password]:hover , input[type=email]:hover , select:hover , input:not([type]):focus ,  input[type=text]:focus , input[type=password]:focus , input[type=email]:focus , select:focus {
+	border-bottom-color: var( --kona-colour-trinary );
+}
+
+option {
+	background: var( --kona-colour-background );
+	color: var( --kona-colour-forground );
+}
+
+/* Lists */
+ul , ol , list-unordered , list-ordered {
+ 	display: block;
+
+	margin-top: 1em;
+	margin-bottom: 1em;
+	margin-left: 0;
+	margin-right: 0;
+
+	padding-left: 40px;
+}
+
+ul , list-unordered {
+	list-style-type: disc;
+}
+
+ol , list-ordered {
+	list-style-type: decimal;
+}
+
+li , list-item {
+	display: list-item;
+}
+
+li::marker , list-item::marker {
+	color: var( --kona-colour-secondary );
+}
+
+/* Other media */
+img, image , video {
+	max-width: 100%;
+
+	margin-top: var( --kona-size-halfary );
+	margin-right: 0px;
+	margin-bottom: var( --kona-size-halfary );
+	margin-left: 0px;
+
+	border-radius: var( --kona-size-halfary );
+}
+
+code {
+	font-family: monospace;
+	color: var( --kona-colour-primary );
+}
+
+pre , preformat {
+ 	display: block;
+
+	padding-top: var( --kona-size-halfary );
+	padding-right: var( --kona-size-halfary );
+	padding-bottom: var( --kona-size-halfary );
+	padding-left: var( --kona-size-halfary );
+
+	border-radius: var( --kona-size-halfary );
+
+	white-space: pre;
+	background: var( --kona-colour-background );
+	font-family: monospace;
+}
+
+blockquote {
+	padding-left: var( --kona-size-halfary );
+	margin-top: var( --kona-size-halfary );
+	margin-right: var( --kona-size-halfary );
+	margin-bottom: var( --kona-size-halfary );
+
+	border-left-width: 2px;
+	border-left-style: solid;
+	border-left-color: var( --kona-colour-primary );
+}
+
+/* Muted text */
+muted , *[muted] {
+	color: var( --kona-colour-foreground );
+	opacity: 0.8;
+}
+
+/*
+   Page structures */
+screen {
+	display: grid;
+
+	height: 100vh;
+	width: 100%;
+}
+
+centre , *[centre] {
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: auto;
+	margin-bottom: auto;
+
+	text-align: center;
+}
+
+content {
+	display: grid;
+
+	height: 100%;
+	width: 100%;
+
+	margin-left: auto;
+	margin-top: 0px;
+	margin-right: auto;
+	margin-bottom: 0px;
+}
+
+@media screen and ( min-width: 768px ) {
+	content {
+		width: 100vh;	/* Feels like a stupid idea but I suck at CSS */
+	}
+}
+
+footer {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: nowrap;
+	justify-content: space-around;	
+
+	padding-left: var( --kona-size-primary );
+	padding-top: var( --kona-size-primary );
+	padding-right: var( --kona-size-primary );
+	padding-bottom: var( --kona-size-primary );
+
+	margin-left: 0px;
+	margin-top: auto;
+	margin-right: 0px;
+	margin-bottom: 0px;
+
+	text-align: center;
+}
+
+/* Panels TODO: Javascript */
+panel-left , panel-right {
+	display: grid;
+	position: fixed;
+	top: 0px;
+
+	padding-left: var( --kona-size-primary );
+	padding-top: var( --kona-size-primary );
+	padding-right: var( --kona-size-primary );
+	padding-bottom: var( --kona-size-primary );
+
+	height: 100vh;
+	width: calc( 380px - 2 * var( --kona-size-primary ) );
+	max-width: 80vw;
+
+	transition: left var( --kona-transition-time ) , right var( --kona-transition-time );
+}
+
+panel-left {
+	left: -379px;
+}
+
+panel-left:hover , panel-left:focus {
+	left: 0px;
+}
+
+panel-right {
+	right: -379px;
+}
+
+panel-right:hover , panel-right:focus {
+	right: 0px;
+}
+
+/* Tags input */
+input-tags , input-tags-entry , input-tags-select {
+	display: grid;
+	grid-template-columns: auto 1em;
+	grid-column-gap: var( --kona-size-halfary );
+	grid-row-gap: var( --kona-size-halfary );
+
+	margin-left: 0px;
+	margin-right: 0px;
+	margin-top: 0px;
+	margin-bottom: var( --kona-size-primary );	
+
+	height: auto;
+	width: auto;
+}
+
+input-tags-check {
+	cursor: pointer;
+
+	color: var( --kona-colour-secondary );
+	transition: color 0.5s;
+}
+
+input-tags-check:hover {
+	color: var( --kona-colour-trinary );
+	text-decoration: none;
+}
+
+
