@@ -18,6 +18,7 @@
 				"https://cors.kona.workers.dev/*"
 			],
 			"js": [
+				"browser-polyfill.js",
 				"interface.js",
 				"profile.js",
 				"content.js"

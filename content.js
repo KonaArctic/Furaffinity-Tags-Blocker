@@ -10,7 +10,7 @@
 	let profile = new FuraffinityProfile( );
 	let cacheSubmission = ( await browser.storage.local.get( "cacheSubmission" ) ).cacheSubmission;
 	if ( cacheSubmission ) {
-		api.cacheSubmission = ( await browser.storage.local.get( "cacheSubmission" ) ).cacheSubmission;
+		api.cacheSubmission = cacheSubmission;
 	}
 	let blocklist = ( await browser.storage.sync.get( "blocklist" ) ).blocklist;
 	if ( blocklist ) {
@@ -51,12 +51,14 @@ try{
 
 	//
 	// Then do prefetching
-	let prefetches = api.getPrefetch( window.document );
-	prefetches = api.getPreviews( prefetches );
-	for ( prefetch of prefetches ) {
-		await api.getSubmission( prefetch );
-		browser.storage.local.set( { cacheSubmission: api.cacheSubmission } );
-	}	
+	if ( await browser.storage.sync.get( "settings" ).settings.prefetch ) { 
+		let prefetches = await api.getPrefetch( window.document );
+		prefetches = await api.getPreviews( prefetches );
+		for ( prefetch of prefetches ) {
+			await api.getSubmission( prefetch );
+			browser.storage.local.set( { cacheSubmission: api.cacheSubmission } );
+		}	
+	}
 }catch(e){
 //	window.document.body.innerHTML=e
 }

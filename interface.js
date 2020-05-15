@@ -42,7 +42,7 @@ class FuraffinityAPI {
 		}
 
 		// Okie~
-		return await response.text( )
+		return ( new DOMParser ).parseFromString( await response.text( ) , "text/html" );
 	}
 
 	//
@@ -55,7 +55,6 @@ class FuraffinityAPI {
 			html = request;
 		} else {
 			html = await this.getPage( request );
-			html = ( new DOMParser ).parseFromString( html , "text/html" );
 		}
 
 		// Does it look like most pages?
@@ -151,16 +150,13 @@ class FuraffinityAPI {
 			}
 			submission = request;
 			response = await this.getPage( "/view/" + request.number );
-			response = ( new DOMParser ).parseFromString( response , "text/html" );
 		} else if ( typeof( request ) == typeof( { } ) ) {
 			response = await this.getPage( request );
-			response = ( new DOMParser ).parseFromString( response , "text/html" );
 		} else {
 			if ( this.cacheSubmission[ request ] ) {
 				return this.cacheSubmission[ request ];
 			}
 			response = await this.getPage( "/view/" + request );
-			response = ( new DOMParser ).parseFromString( response , "text/html" );
 		}
 
 		// Info strings
@@ -202,7 +198,6 @@ class FuraffinityAPI {
 			html = request;
 		} else {
 			html = await this.getPage( request );
-			html = ( new DOMParser ).parseFromString( html , "text/html" );
 		}
 
 		// For the browse or search page, this means the next page
