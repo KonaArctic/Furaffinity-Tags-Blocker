@@ -1,35 +1,35 @@
 <html>
 	<head>
 		<meta charset="utf-8">
-		<link rel="stylesheet" href="kona.css">
-		<script src="kona.js"></script>
+		<link rel="stylesheet" href="theme.css">
+		<script src="theme.js"></script>
 		<style>
 			body {
-				height: auto;
+				height: 400px;
 				width: auto;
 			}
 		</style>
+		<script src="popup.js"></script>
 	</head>
 	<body>
 		<segment>
-			<header-3 centre noblock>
+			<header-3 centre>
 				SFWify
 			</header-3>
 
-			<segment>
-				
+			<segment style="display: none;" id=masterswitch>
+				<!-- TODO: master switch goes here -->
 			</segment>
 
 			<paragraph>
-				Block submissions having any of:
+				Block submissions with any of:
 			</paragraph>
 
 			<header-6 noblock>
 				Category
 			</header-6>
-			<input-tags-select>
+			<input-tags-select id=category >
 				<optgroup label="Visual Art">
-					<option selected="selected">All</option>
 					<option>Artwork (Digital)</option>
 					<option>Artwork (Traditional)</option>
 					<option>Cellshading</option>
@@ -74,9 +74,8 @@
 			<header-6 noblock>
 				Type
 			</header-6>
-			<input-tags-select>
+			<input-tags-select id=type>
 				<optgroup label="General Things">
-					<option selected="selected">All</option>
 					<option>Abstract</option>
 					<option>Animal related (non-anthro)</option>
 					<option>Anime</option>
@@ -136,21 +135,32 @@
 			<header-6 noblock>
 				Tags
 			</header-6>
-			<input-tags-entry>
+			<input-tags-entry id=tags>
 			</input-tags-entry>
 
 			<header-6 noblock>
 				Title <muted>keywords</muted>
 			</header-6>
-			<input-tags-entry>
+			<input-tags-entry id=title>
 			</input-tags-entry>
 			
 			<header-6 noblock>
 				Description <muted>keywords</muted>
 			</header-6>
-			<input-tags-entry>
+			<input-tags-entry id=description>
 			</input-tags-entry>
 
+			<header-6 noblock inline>
+				Prefetch
+			</header-6>
+			<input type=checkbox inline id=prefetch>
+			</input>
+			<paragraph>
+				<muted>Improve reaction times at the <br/>cost of increased data usage. </muted>
+			</paragraph>
+			<muted centre>
+				2020 AKona <a href="https://terms.akona.me">Terms & Privacy</a> 
+			</muted>
 		</segment>
 	</body>
 </html>

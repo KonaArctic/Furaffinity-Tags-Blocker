@@ -46,13 +46,18 @@ class kona_input_tags extends HTMLElement {
 		super( );
 	}
 
-	append ( content ) {
+	append( content ) {
 		if ( content == "" ) {
 			return
 		}
-		this.remove( content );
 
-		let item = window.document.createElement( "input-tags-tag" );
+		for ( let item of this.getElementsByTagName( "tag" ) ) {
+			if ( item.innerHTML.toLocaleLowerCase( ) == content.toLocaleLowerCase( ) ) {
+				return;
+			}
+		}		
+
+		let item = window.document.createElement( "tag" );
 		item.innerHTML = content;
 		this.appendChild( item );
 
@@ -62,23 +67,31 @@ class kona_input_tags extends HTMLElement {
 		check.style.display = "inline";
 		check.addEventListener( "click" , ( event => this.remove( content ) ) );
 		this.appendChild( check );
+
+		this.dispatchEvent( new Event( "change" ) );
 	}
 
-	remove ( content ) {
-		for ( let item of this.getElementsByTagName( "input-tags-tag" ) ) {
+	remove( content ) {
+		for ( let item of this.getElementsByTagName( "tag" ) ) {
 			if ( item.innerHTML.toLocaleLowerCase( ) == content.toLocaleLowerCase( ) ) {
 				item.nextSibling.remove( );
 				item.remove( );
 			}
 		}
+		this.dispatchEvent( new Event( "change" ) );
 	}
 
-	get values ( ) {
+	get values( ) {
 		let array = [ ];
-		for ( let item of this.getElementsByTagName( "input-tags-tag" ) ) {
+		for ( let item of this.getElementsByTagName( "tag" ) ) {
 			array.push( item.innerHTML );
 		}
 		return array;
+	}
+
+	set values( values ) {
+		values.forEach( value => this.append( value ) );	// FIXME: dispateches too many onChange events
+		this.dispatchEvent( new Event( "change" ) );
 	}
 }
 

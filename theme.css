@@ -69,6 +69,10 @@ segment {
 	margin-bottom: 0px;
 }
 
+*[inline] {
+	display: inline-block;
+}
+
 debug , *[debug] {
 	background: var( --kona-colour-foreground ) !important;
 	color: var( --kona-colour-background ) !important;
@@ -80,7 +84,7 @@ h1 , h2 , h3 , h4 , h5 , h6 , header-1 , header-2 , header-3 , header-4 , header
 	display: block;
 
 	margin-left: 0px;
-	margin-top: 0px; /*var( --kona-size-primary ); */
+	margin-top: 0px;
 	margin-right: 0px;
 	margin-bottom: var( --kona-size-primary );
 
@@ -117,12 +121,12 @@ h1 , header-1 {
 /* Hyperlinks and others*/
 a {
 	color: var( --kona-colour-secondary );
+	text-decoration: none;
 	transition: color 0.5s;
 }
 
 a:hover , anchor:hover {
 	color: var( --kona-colour-trinary );
-	text-decoration: none;
 }
 
 p , paragraph {
@@ -145,11 +149,23 @@ input:not([type]) , input[type=text] , input[type=password] , input[type=email] 
 
 	background: rgba( 0 , 0 , 0 , 0.0 );
 	color: inherit;
+	
 	transition: border-bottom-color var( --kona-transition-time );
 }
 
 input:not([type]):hover , input[type=text]:hover , input[type=password]:hover , input[type=email]:hover , select:hover , input:not([type]):focus ,  input[type=text]:focus , input[type=password]:focus , input[type=email]:focus , select:focus {
 	border-bottom-color: var( --kona-colour-trinary );
+}
+
+input[type=checkbox] {
+	border-radius: 0px;
+	border-color: var( --kona-colour-secondary );
+
+	transition: border-bottom-color var( --kona-transition-time );
+}
+
+input[type=checkbox]:hover {
+	border-color: var( --kona-colour-trinary );
 }
 
 option {
@@ -230,8 +246,9 @@ blockquote {
 
 /* Muted text */
 muted , *[muted] {
+	font-size: 0.9em;
 	color: var( --kona-colour-foreground );
-	opacity: 0.8;
+	opacity: 0.7;
 }
 
 /*

@@ -9,6 +9,8 @@ class FuraffinityAPI {
 	// Gets any page from Furaffinity, honouring rate limits.
 	async getPage( request ) {
 
+		// Note on Furaffinity's rate limiting: 
+		// Experimentally, anything more than approx. three requests per seconds, and approx. five concurrent connections, per IP address causes Furaffinity's servers to behave slowly, return 503 errors, or both.
 		// Limit to one request every 0.3s
 		while ( Date.now( ) < this.lastRequestTime + 300 ) {
 			await new Promise( resolve => setTimeout( resolve , 300 - ( Date.now( ) - this.lastRequestTime ) ) );
@@ -17,7 +19,7 @@ class FuraffinityAPI {
 
 		// If it's a path, convert to request object
 		if ( typeof( request ) == typeof( "string" ) || typeof( request ) == typeof( 1234 ) ) {
-			request = new Request( this.corsProxy + "https://www.furaffinity.net/" + request , {
+			request = new Request( "https://www.furaffinity.net/" + request , {
 				method: "GET",
 				credentials: "include",
 				referrerPolicy: "no-referrer",
@@ -46,16 +48,13 @@ class FuraffinityAPI {
 	//
 	// Gets information about all previews on a page
 	async getPreviews( request ) {
+
 		// Fetch if not HTML element
 		let html = null;
-		if ( typeof( request ) == typeof( window.document ) ) {
+		if ( request.getElementById ) {
 			html = request;
 		} else {
-			if ( typeof( request ) == typeof( new Request( "https://akona.me" , { } ) ) ) {
-				html = await this.getPage( request );
-			} else {
-				html = await this.getPage( "/" + request );
-			}
+			html = await this.getPage( request );
 			html = ( new DOMParser ).parseFromString( html , "text/html" );
 		}
 
@@ -138,25 +137,31 @@ class FuraffinityAPI {
 	// Gets information about a submission
 	async getSubmission( request ) {
 
-		// First, check cache
-		if ( this.cacheSubmission[ request ] ) {
-			return this.cacheSubmission[ request ];
-		}
-
-		// Otherwise fetch if not HTML element
 		let response = null;
-		if ( typeof( request ) == typeof( window.document ) ) {
+		let submission = new FuraffinityAPI.Submission( );
+
+
+		// Fetch if not HTML element
+		if ( request.getElementsByClassName ) {
 			response = request;
-		} else {
-			if ( typeof( request ) == typeof( new Request( "https://akona.me/" , { } ) ) ) {
-				response = await this.getPage( request );
-			} else {
-				response = await this.getPage( "/view/" + request );
+		} else if ( request.number ) {
+			// Cache?
+			if ( this.cacheSubmission[ request.number ] ) {
+				return this.cacheSubmission[ request.number ];
 			}
+			submission = request;
+			response = await this.getPage( "/view/" + request.number );
+			response = ( new DOMParser ).parseFromString( response , "text/html" );
+		} else if ( typeof( request ) == typeof( { } ) ) {
+			response = await this.getPage( request );
+			response = ( new DOMParser ).parseFromString( response , "text/html" );
+		} else {
+			if ( this.cacheSubmission[ request ] ) {
+				return this.cacheSubmission[ request ];
+			}
+			response = await this.getPage( "/view/" + request );
 			response = ( new DOMParser ).parseFromString( response , "text/html" );
 		}
-
-		let submission = new FuraffinityAPI.Submission( );
 
 		// Info strings
 		if ( response.getElementsByClassName( "info" )[ 0 ] ) {
@@ -187,8 +192,28 @@ class FuraffinityAPI {
 		return submission;
 	}
 
-	/* Simple CORS proxy for debugging */
-	corsProxy = "https://cors.kona.workers.dev/corsproxy/?apiurl=";
+	//
+	// Prefetch returns only returns a request object for getPreviews
+	async getPrefetch(  ) {
+
+		// copypasta ...
+		let html = null;
+		if ( request.getElementById ) {
+			html = request;
+		} else {
+			html = await this.getPage( request );
+			html = ( new DOMParser ).parseFromString( html , "text/html" );
+		}
+
+		// For the browse or search page, this means the next page
+		if ( html.document.getElementById( "browse-search" ) ) {
+			let form = window.document.getElementById( "browse-search" ).getElementsByClassName( "section-body" )[ 0 ].getElementsByTagName( "form" )[ 1 ];
+		} else if ( html.document.getElementById( "search-form" ) ) {
+			let form = window.document.getElementById( "search-form" );
+		}
+
+		return new Request( form.action , { method : form.method , body : new URLSearchParams( new FormData( form ) ) } );
+	}
 
 	/* In seconds since epoch a HTTP request to Furaffinity was made */
 	lastRequestTime = 0;
@@ -203,7 +228,7 @@ FuraffinityAPI.Submission = class {
 	constructor( ) { }
 
 	element = null;
-	number = 0;
+	number = 1;
 	thumbnail = null;
 	link = null;
 	author = null;
@@ -215,6 +240,14 @@ FuraffinityAPI.Submission = class {
 	tags = [ ];
 	description = null;
 	rating = null;
-	display = true;
+
+	destroy( ) {
+		if ( this.element ) {
+			this.element.remove( );
+
+			// For some pages, somehow triggering a resize helps
+			window.dispatchEvent( new Event( "resize" ) );
+		}
+	}
 }
-	
+

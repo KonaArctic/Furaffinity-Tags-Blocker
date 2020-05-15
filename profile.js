@@ -4,15 +4,15 @@ class FuraffinityProfile {
 	constructor( ) { }
 
 	//
-	// Testing blocklist
+	// Dummy blocklist
 	blocklist = {
 		author: [ ] ,
-		title: [ "YCH" , "Reminder" ] ,
+		title: [ ] ,
 		category: [ ] ,
-		subcategory: [ "Fat Furs" , "Inflation" , "Baby fur" ] ,
+		subcategory: [ ] ,
 		species: [ ] ,
 		gender: [ ] ,
-		tags: [ "macro" , "obese" , "inflation" , "vore" , "feet" , "foot" , "diapered" ] ,
+		tags: [ ] ,
 		description: [ ] ,
 	}
 
