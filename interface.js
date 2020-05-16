@@ -140,28 +140,37 @@ class FuraffinityAPI {
 		let submission = new FuraffinityAPI.Submission( );
 
 
-		// Fetch if not HTML element
+		// Is the request a HTML element?
 		if ( request.getElementsByClassName ) {
 			response = request;
+
+		// Maybe a submission object?
 		} else if ( request.number ) {
 			// Cache?
-			if ( this.cacheSubmission[ request.number ] ) {
-				return this.cacheSubmission[ request.number ];
+			if ( this.cacheSubmission[ "" + request.number ] ) {
+				return this.cacheSubmission[ "" + request.number ];
 			}
+
 			submission = request;
 			response = await this.getPage( "/view/" + request.number );
+
+		// Or another object?
 		} else if ( typeof( request ) == typeof( { } ) ) {
 			response = await this.getPage( request );
+
+		// Just a number?
 		} else {
-			if ( this.cacheSubmission[ request ] ) {
-				return this.cacheSubmission[ request ];
+			// Cache?
+			if ( this.cacheSubmission[ "" + request ] ) {
+				return this.cacheSubmission[ "" + request ];
 			}
+
 			response = await this.getPage( "/view/" + request );
 		}
 
 		// Info strings
-		if ( response.getElementsByClassName( "info" )[ 0 ] ) {
-			let info = response.getElementsByClassName( "info" )[ 0 ]
+		let info = response.getElementsByClassName( "info" )[ 0 ]
+		if ( info ) {
 			submission.category = info.getElementsByClassName( "category-name" )[ 0 ].innerHTML;
 			submission.subcategory = info.getElementsByClassName( "type-name" )[ 0 ].innerHTML;
 			submission.species = info.children[ 1 ].children[ 1 ].innerHTML;
@@ -169,28 +178,37 @@ class FuraffinityAPI {
 		}
 
 		// Tags
-		let tags = response.getElementsByClassName( "tags-row" )[ 0 ].children;
-		for ( let i = 0 ; i < tags.length ; i ++ ) {
-			submission.tags[ i ] = tags[ i ].children[ 0 ].innerHTML;
+		let tags = response.getElementsByClassName( "tags-row" )[ 0 ];
+		if ( tags ) {
+			for ( let i = 0 ; i < tags.children.length ; i ++ ) {
+				submission.tags[ i ] = tags.children[ i ].children[ 0 ].innerHTML;
+			}
 		}
 
 		// Author, title, and description
-		if ( response.getElementsByClassName( "submission-id-sub-container" )[ 0 ] ) {
-			let subcontainer = response.getElementsByClassName( "submission-id-sub-container" )[ 0 ]
+		let subcontainer = response.getElementsByClassName( "submission-id-sub-container" )[ 0 ];
+		if ( subcontainer ) {
 			submission.title = subcontainer.children[ 0 ].children[ 0 ].children[ 0 ].innerHTML;
 			submission.author = subcontainer.children[ 1 ].children[ 0 ].innerHTML;
 		}
-		submission.description = response.getElementsByClassName( "submission-description" )[ 0 ].innerHTML;
+		let description = response.getElementsByClassName( "submission-description" )[ 0 ];
+		if ( description ) {
+			submission.description = description;
+		}
 
-		// Also, store in cache
-		this.cacheSubmission[ request ] = submission;
+		// Also, store in cache if possible
+		if ( request.number ) {
+			this.cacheSubmission[ "" + request.number ] = submission;
+		} else if ( typeof( request ) == typeof( "string" ) || typeof( request ) == typeof( 1234 ) ) {
+			this.cacheSubmission[ "" + request ] = submission;
+		}
 
 		return submission;
 	}
 
 	//
 	// Prefetch returns only returns a request object for getPreviews
-	async getPrefetch(  ) {
+	async getPrefetch( request ) {
 
 		// copypasta ...
 		let html = null;
@@ -201,20 +219,24 @@ class FuraffinityAPI {
 		}
 
 		// For the browse or search page, this means the next page
-		if ( html.document.getElementById( "browse-search" ) ) {
-			let form = window.document.getElementById( "browse-search" ).getElementsByClassName( "section-body" )[ 0 ].getElementsByTagName( "form" )[ 1 ];
-		} else if ( html.document.getElementById( "search-form" ) ) {
-			let form = window.document.getElementById( "search-form" );
+		let form = null;
+		if ( html.getElementById( "search-form" ) ) {
+			form = html.getElementById( "search-form" );
+		} else if ( html.getElementById( "browse-search" ) ) {
+			form = html.getElementById( "browse-search" ).getElementsByClassName( "section-body" )[ 0 ].getElementsByTagName( "form" )[ 1 ];
+		} else {
+			return null;
 		}
 
-		return new Request( form.action , { method : form.method , body : new URLSearchParams( new FormData( form ) ) } );
+		form = new FormData( form );
+		return new Request( form.action , { method: form.method , body: new URLSearchParams( form ) } );
 	}
 
 	/* In seconds since epoch a HTTP request to Furaffinity was made */
 	lastRequestTime = 0;
 
 	/* Caches goes here */
-	cacheSubmission = { };	// FIXME: diff. string v. integer
+	cacheSubmission = { };
 }
 
 //

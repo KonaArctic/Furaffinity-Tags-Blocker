@@ -5,7 +5,7 @@
 	"name": "SFWify",
 	"description": "Blocks p0rn on Furaffinity",
 	"homepage_url": "https://sfwify.akona.me/",
-	"version": "0.2a",
+	"version": "0.2",
 
 	"icons": {
 		"32": "icon.png"
@@ -14,8 +14,7 @@
 	"content_scripts": [
 		{
 			"matches": [
-				"*://www.furaffinity.net/*",
-				"https://cors.kona.workers.dev/*"
+				"*://www.furaffinity.net/*"
 			],
 			"js": [
 				"browser-polyfill.js",
@@ -30,20 +29,27 @@
 		"*://www.furaffinity.net/*",
 		"https://fonts.googleapis.com/*",
 		"https://fonts.gstatic.com/*",
-		"storage"
+		"storage",
+		"unlimitedStorage"
 	],
 
 	"browser_action": {
 		"default_title": "SFWify",
 		"default_icon": "icon.png",
-		"default_popup": "popup.html"
+		"default_popup": "popup.html",
+		"show_matches": [
+			"*://www.furaffinity.net/*"
+		]
 	},
 
 	"browser_specific_settings": {
 		"gecko": {
-			"id": "sfwify@sfwify.akona.me"
+			"id": "sfwify@sfwify.akona.me",
+			"update_url": "https://sfwify.akona.me/updates.json"
 		}
-	}
+	},
+
+	"update_url": "https://sfwify.akona.me/updates.xml"
 }
 
 

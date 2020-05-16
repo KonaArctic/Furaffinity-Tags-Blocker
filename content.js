@@ -9,6 +9,7 @@
 	let api = new FuraffinityAPI( );
 	let profile = new FuraffinityProfile( );
 	let cacheSubmission = ( await browser.storage.local.get( "cacheSubmission" ) ).cacheSubmission;
+
 	if ( cacheSubmission ) {
 		api.cacheSubmission = cacheSubmission;
 	}
@@ -19,7 +20,7 @@
 
 	// Get list of previews
 	let previews = await api.getPreviews( window.document );
-try{
+
 	// For every preview
 	for ( preview of previews ) {
 		// See if match already with known information
@@ -36,7 +37,9 @@ try{
 		}
 
 		// Otherwise, check for unused fields and fetch more information
-		if ( Object.keys( profile.blocklist ).some( key => profile.blocklist[ key ].length && ( ! preview[ key ] ) ) ) {
+		if ( Object.keys( profile.blocklist ).some( function( key ) {
+				return profile.blocklist[ key ].length && ( ! preview[ key ] ) ? 1 : -1;	// Compact version does not work on Chrome https://www.freecodecamp.org/forum/t/the-sort-method-behaves-different-on-different-browsers/237221
+			} ) ) {
 
 			// With Furaffinity's response speeds, a synchronous operation seems OK to avoid a rate limit
 			let submission = await api.getSubmission( preview );
@@ -51,17 +54,14 @@ try{
 
 	//
 	// Then do prefetching
-	if ( await browser.storage.sync.get( "settings" ).settings.prefetch ) { 
+	if ( ( await browser.storage.sync.get( "settings" ) ).settings.prefetch ) { 
 		let prefetches = await api.getPrefetch( window.document );
 		prefetches = await api.getPreviews( prefetches );
 		for ( prefetch of prefetches ) {
 			await api.getSubmission( prefetch );
-			browser.storage.local.set( { cacheSubmission: api.cacheSubmission } );
+			await browser.storage.local.set( { cacheSubmission: api.cacheSubmission } );
 		}	
 	}
-}catch(e){
-//	window.document.body.innerHTML=e
-}
 } )( );
 
 
