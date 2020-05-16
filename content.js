@@ -21,7 +21,7 @@
 		blocklist = profile.blocklist;
 		blocklist.subcategory = [ "Fat Furs" , "Paws" , "Baby fur" ];
 		blocklist.tags = [ "obesity" , "feet" , "diaper" , "diapers" ];
-		blocklist.tags = [ "feet" , "diaper" ];
+		blocklist.title = [ "feet" , "diaper" ];
 		await browser.storage.sync.set( { "blocklist" : blocklist } ) 
 	}
 
