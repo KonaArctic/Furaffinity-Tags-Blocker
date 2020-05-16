@@ -1,4 +1,4 @@
-// Furaffinity Tags Blocker, main operations. 2020 Arctic Kona. No rights reserved.
+// SWFify, content script. 2020 Arctic Kona. 
 // TODO:
 
 ( async function ( ) {
