@@ -8,14 +8,16 @@ Install
 -------
 SFWify still needs approval by the Chrome Store. Right now you will have to install it manually.
 
-Chrome
+Chrome:
+
 0.	Download and unzip
 1.	Open chrome://extensions
 2.	Enable developer mode
 3.	Select load unpacked
 4.	Done!
 
-Firefox
+Firefox:
+
 0.	Click [this](https://github.com/ArcticKona/Furaffinity-Tags-Blocker/raw/master/Furaffinity%20Tags%20Blocker.xpi)
 
 TODO
