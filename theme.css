@@ -15,11 +15,11 @@
 	--kona-colour-secondary: rgba( 255 , 150 , 150 , 1.0 );
 	--kona-colour-trinary: rgba( 255 , 255 , 127 , 1.0 );
 	--kona-colour-foreground: rgba( 255 , 255 , 255 , 1.0 );
-	--kona-colour-background: #191c1c; /*rgba( 0 , 0 , 0 , 1.0 );*/
+	--kona-colour-background: rgba( 0 , 0 , 0 , 1.0 );
 
 	/* Fonts */
 	--kona-font-size: 16px;
-	--kona-font-primary: Comfortaa, Quicksand, serif;
+	--kona-font-primary: Comfortaa, Quicksand, cursive;
 	--kona-font-secondary: Montserrat, Open Sans, sans-serif;
 	--kona-font-trinary: ;
 

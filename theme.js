@@ -4,7 +4,7 @@
 //
 // Redirect to HTTPS
 if ( window.location.protocol == "http:" && window.location.hostname != "localhost" ) {
-	window.location.protocol = "https:";
+//	window.location.protocol = "https:";
 }
 
 //

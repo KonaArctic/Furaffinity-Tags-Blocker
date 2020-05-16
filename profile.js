@@ -1,19 +1,19 @@
 // Furaffinity Tags Blocker, default function to check submissions. 2020 Kona Arctic. Contacts: mailto:arcticjieer@gmail.com https://akona.me/. Copyright: https://license.akona.me/. NO WARRANTY!
 
 class FuraffinityProfile {
-	constructor( ) { }
-
-	//
-	// Dummy blocklist
-	blocklist = {
-		author: [ ] ,
-		title: [ ] ,
-		category: [ ] ,
-		subcategory: [ ] ,
-		species: [ ] ,
-		gender: [ ] ,
-		tags: [ ] ,
-		description: [ ] ,
+	constructor( ) {
+		//
+		// Dummy blocklist
+		this.blocklist = {
+			author: [ ] ,
+			title: [ ] ,
+			category: [ ] ,
+			subcategory: [ ] ,
+			species: [ ] ,
+			gender: [ ] ,
+			tags: [ ] ,
+			description: [ ] ,
+		}
 	}
 
 	//

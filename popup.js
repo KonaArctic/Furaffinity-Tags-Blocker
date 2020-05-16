@@ -38,7 +38,11 @@ window.document.addEventListener( "DOMContentLoaded" , function ( event ) {
 
 		// Don't forget caching UI
 		let cachesize = window.document.getElementById( "cachesize" )
-		cachesize.innerHTML = ( await browser.storage.local.getBytesInUse( "cacheSubmission" ) / 1000 / 1000 ).toFixed( 2 );
+		if ( browser.storage.local.getBytesInUse ) {
+			cachesize.innerHTML = ( await browser.storage.local.getBytesInUse( "cacheSubmission" ) / 1000 / 1000 ).toFixed( 2 );
+		} else {
+			cachesize.innerHTML = ( JSON.stringify( await browser.storage.local.get( "cacheSubmission" ).cacheSubmission ).length / 1000 / 1000 ).toFixed( 2 );
+		}
 		window.document.getElementById( "caching" ).addEventListener( "click" , function( event ) {
 			browser.storage.local.set( { "cacheSubmission": { } } );
 			cachesize.innerHTML = "0.00";

@@ -3,7 +3,13 @@
 // *	Use as background script (maybe)
 
 class FuraffinityAPI {
-	constructor( ) { }
+	constructor( ) {
+		/* In seconds since epoch a HTTP request to Furaffinity was made */
+		this.lastRequestTime = 0;
+
+		/* Caches goes here */
+		this.cacheSubmission = { };
+	}
 
 	//
 	// Gets any page from Furaffinity, honouring rate limits.
@@ -218,45 +224,66 @@ class FuraffinityAPI {
 			html = await this.getPage( request );
 		}
 
-		// For the browse or search page, this means the next page
+		// This means the next page
 		let form = null;
+		let body = null;
+		
+		// For the search form,
 		if ( html.getElementById( "search-form" ) ) {
 			form = html.getElementById( "search-form" );
-		} else if ( html.getElementById( "browse-search" ) ) {
-			form = html.getElementById( "browse-search" ).getElementsByClassName( "section-body" )[ 0 ].getElementsByTagName( "form" )[ 1 ];
+			body = new URLSearchParams( new FormData( form ) );
+			let page = html.getElementsByClassName( "pagination" )[ 0 ].children[ 1 ].innerText.split( "#" )[ 1 ];
+			page = window.parseInt( page );
+			body.set( "page" , page + 1 );
+
+		// browse page,
+		} else if ( html.getElementsByClassName( "browse-content" ) ) {
+			form = html.getElementsByClassName( "browse-content" )[ 0 ].getElementsByClassName( "navigation" )[ 0 ].children[ 2 ].children[ 0 ];
+			body = new URLSearchParams( new FormData( form ) );
+
+		// gallery,
+		} else if ( html.getElementsByClassName( "submission-list" ) ) {
+			form = html.getElementsByClassName( "submission-list" )[ 0 ].children[ 0 ].children[ 2 ].getElementsByTagName( "form" )[ 0 ];
+			body = "";
+
+		// or favorites
+		} else if ( html.getElementById( "gallery-favorites" ) ) {
+			let href = window.document.getElementsByClassName( "pagination" )[ 0 ].getElementsByClassName( "right" )[ 0 ].href;
+			return new Request( href , { credentials: "include" , referrerPolicy: "no-referrer" } );	
+
+		// None of the above
 		} else {
 			return null;
 		}
 
-		form = new FormData( form );
-		return new Request( form.action , { method: form.method , body: new URLSearchParams( form ) } );
+		// Return object
+		return new Request( form.action , {
+			method: form.method,
+			credentials: "include",
+			referrerPolicy: "no-referrer",
+			body: body,
+		} );
 	}
-
-	/* In seconds since epoch a HTTP request to Furaffinity was made */
-	lastRequestTime = 0;
-
-	/* Caches goes here */
-	cacheSubmission = { };
 }
 
 //
 // Boilerplate submission object
 FuraffinityAPI.Submission = class {
-	constructor( ) { }
-
-	element = null;
-	number = 1;
-	thumbnail = null;
-	link = null;
-	author = null;
-	title = null;
-	category = null;
-	subcategory = null;
-	species = null;
-	gender = null;
-	tags = [ ];
-	description = null;
-	rating = null;
+	constructor( ) {
+		this.element = null;
+		this.number = 1;
+		this.thumbnail = null;
+		this.link = null;
+		this.author = null;
+		this.title = null;
+		this.category = null;
+		this.subcategory = null;
+		this.species = null;
+		this.gender = null;
+		this.tags = [ ];
+		this.description = null;
+		this.rating = null;
+	}
 
 	destroy( ) {
 		if ( this.element ) {
