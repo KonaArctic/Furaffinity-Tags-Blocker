@@ -16,11 +16,7 @@ Chrome
 4.	Done!
 
 Firefox
-0.	Download and unzip
-1.	Open about:debugging
-2.	Select this Firefox
-3.	Load
-4.	Done!
+0.	Click [this](https://github.com/ArcticKona/Furaffinity-Tags-Blocker/raw/master/Furaffinity%20Tags%20Blocker.xpi)
 
 TODO
 ----
