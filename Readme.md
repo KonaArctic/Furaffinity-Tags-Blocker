@@ -18,7 +18,7 @@ Chrome:
 
 Firefox:
 
-0.	Click [this](https://github.com/ArcticKona/Furaffinity-Tags-Blocker/raw/master/Furaffinity%20Tags%20Blocker.xpi)
+0.	Click [here](https://github.com/ArcticKona/Furaffinity-Tags-Blocker/releases/download/v0.2/sfwify-0.2-an+fx.xpi)
 
 TODO
 ----
