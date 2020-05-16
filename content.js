@@ -16,6 +16,13 @@
 	let blocklist = ( await browser.storage.sync.get( "blocklist" ) ).blocklist;
 	if ( blocklist ) {
 		profile.blocklist = blocklist;
+	} else {
+		// Here's a basic blocklist
+		blocklist = profile.blocklist;
+		blocklist.subcategory = [ "Fat Furs" , "Paws" , "Baby fur" ];
+		blocklist.tags = [ "obesity" , "feet" , "diaper" , "diapers" ];
+		blocklist.tags = [ "feet" , "diaper" ];
+		await browser.storage.sync.set( { "blocklist" : blocklist } ) 
 	}
 
 	// Get list of previews
