@@ -1,4 +1,4 @@
-// Furaffinity Tags Blocker, main operations. 2020 Arctic Kona. No rights reserved.
+// SWFify, content script. 2020 Arctic Kona. 
 // TODO:
 
 ( async function ( ) {
@@ -20,7 +20,7 @@
 		blocklist = profile.blocklist;
 		blocklist.subcategory = [ "Fat Furs" , "Paws" , "Baby fur" ];
 		blocklist.tags = [ "obesity" , "feet" , "diaper" , "diapers" ];
-		blocklist.tags = [ "feet" , "diaper" ];
+		blocklist.title = [ "feet" , "diaper" ];
 		await browser.storage.sync.set( { "blocklist" : blocklist } ) 
 	}
 
