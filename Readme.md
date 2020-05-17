@@ -22,7 +22,7 @@ Firefox:
 
 TODO
 ----
--	Fix prefetching
+-	Fix caching and prefetching (Firefox only)
 -	Improve GUI
 -	Implement edge caching servers to improve speed
 
