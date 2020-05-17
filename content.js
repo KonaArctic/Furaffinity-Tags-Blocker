@@ -9,7 +9,6 @@
 	let api = new FuraffinityAPI( );
 	let profile = new FuraffinityProfile( );
 	let cacheSubmission = ( await browser.storage.local.get( "cacheSubmission" ) ).cacheSubmission;
-
 	if ( cacheSubmission ) {
 		api.cacheSubmission = cacheSubmission;
 	}
@@ -55,7 +54,7 @@
 			}
 
 			// FIXME: this might be a bad way to operate caching
-			browser.storage.local.set( { cacheSubmission: api.cacheSubmission } );
+			browser.storage.local.set( { "cacheSubmission": api.cacheSubmission } );
 		}
 	}
 
@@ -66,7 +65,7 @@
 		prefetches = await api.getPreviews( prefetches );
 		for ( prefetch of prefetches ) {
 			await api.getSubmission( prefetch );
-			await browser.storage.local.set( { cacheSubmission: api.cacheSubmission } );
+			await browser.storage.local.set( { "cacheSubmission": api.cacheSubmission } );
 		}	
 	}
 } )( );

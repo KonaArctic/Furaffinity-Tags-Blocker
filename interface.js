@@ -10,7 +10,7 @@ class FuraffinityAPI {
 		/* Caches goes here */
 		this.cacheSubmission = { };
 	}
-
+API
 	//
 	// Gets any page from Furaffinity, honouring rate limits.
 	async getPage( request ) {
@@ -154,7 +154,10 @@ class FuraffinityAPI {
 		} else if ( request.number ) {
 			// Cache?
 			if ( this.cacheSubmission[ "" + request.number ] ) {
-				return this.cacheSubmission[ "" + request.number ];
+				for ( let key of [ "number" , "thumbnail" , "link" , "author" , "title" , "category" , "subcategory" , "species" , "gender" , "tags" , "description" , "rating" ] ) {
+					submission[ key ] = this.cacheSubmission[ "" + request.number ][ key ];
+				}
+				return submission;
 			}
 
 			submission = request;
@@ -166,11 +169,7 @@ class FuraffinityAPI {
 
 		// Just a number?
 		} else {
-			// Cache?
-			if ( this.cacheSubmission[ "" + request ] ) {
-				return this.cacheSubmission[ "" + request ];
-			}
-
+			// FIXME: I can't return from cache because I don't know what HTML element .destory( ) applies to
 			response = await this.getPage( "/view/" + request );
 		}
 
@@ -194,19 +193,33 @@ class FuraffinityAPI {
 		// Author, title, and description
 		let subcontainer = response.getElementsByClassName( "submission-id-sub-container" )[ 0 ];
 		if ( subcontainer ) {
-			submission.title = subcontainer.children[ 0 ].children[ 0 ].children[ 0 ].innerHTML;
 			submission.author = subcontainer.children[ 1 ].children[ 0 ].innerHTML;
+		}
+		let title = response.querySelector( "meta[property=\"og:title\"]" );
+		if ( title ) {
+			title.getAttribute( "content" );
 		}
 		let description = response.getElementsByClassName( "submission-description" )[ 0 ];
 		if ( description ) {
-			submission.description = description;
+			submission.description = description.innerHTML;
+		}
+
+		// Thumbnail and link
+		// TODO: implement
+
+		// Submission number
+		let number = response.querySelector( "meta[property=\"og:url\"]" );
+		if ( number ) {
+			submission.number = number.getAttribute( "content" ).split( "/" )[ 4 ];
 		}
 
 		// Also, store in cache if possible
-		if ( request.number ) {
-			this.cacheSubmission[ "" + request.number ] = submission;
-		} else if ( typeof( request ) == typeof( "string" ) || typeof( request ) == typeof( 1234 ) ) {
-			this.cacheSubmission[ "" + request ] = submission;
+		// On some browsers the browser.storage API is picky: it cannot store objects like HTML elements or methods. https://bugzilla.mozilla.org/show_bug.cgi?id=1370884
+		if ( submission.number ) {
+			this.cacheSubmission[ submission.number ] = { };
+			for ( let key of [ "number" , "thumbnail" , "link" , "author" , "title" , "category" , "subcategory" , "species" , "gender" , "tags" , "description" , "rating" ] ) {
+				this.cacheSubmission[ submission.number ][ key ] = submission[ key ];
+			}
 		}
 
 		return submission;
@@ -233,7 +246,7 @@ class FuraffinityAPI {
 			form = html.getElementById( "search-form" );
 			body = new URLSearchParams( new FormData( form ) );
 			let page = html.getElementsByClassName( "pagination" )[ 0 ].children[ 1 ].innerText.split( "#" )[ 1 ];
-			page = window.parseInt( page );
+			page = parseInt( page );
 			body.set( "page" , page + 1 );
 
 		// browse page,
@@ -289,7 +302,7 @@ FuraffinityAPI.Submission = class {
 		if ( this.element ) {
 			this.element.remove( );
 
-			// For some pages, somehow triggering a resize helps
+			// For some pages, somehow triggering a resize helps layout
 			window.dispatchEvent( new Event( "resize" ) );
 		}
 	}
