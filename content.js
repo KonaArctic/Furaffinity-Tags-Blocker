@@ -18,8 +18,8 @@
 	} else {
 		// Here's a basic blocklist
 		blocklist = profile.blocklist;
-		blocklist.subcategory = [ "Fat Furs" , "Paws" , "Baby fur" ];
-		blocklist.tags = [ "obesity" , "feet" , "diaper" , "diapers" ];
+		blocklist.subcategory = [ "Fat Furs" , "Paws" ];
+		blocklist.tags = [ "vore" , "feet" , "diaper" , "diapers" ];
 		blocklist.title = [ "feet" , "diaper" ];
 		await browser.storage.sync.set( { "blocklist" : blocklist } ) 
 	}

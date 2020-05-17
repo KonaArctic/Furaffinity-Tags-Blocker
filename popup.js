@@ -7,13 +7,19 @@ window.document.addEventListener( "DOMContentLoaded" , function ( event ) {
 			window.document.getElementById( "prefetch" ).checked = settings.prefetch;
 		}
 		let blocklist = ( await browser.storage.sync.get( "blocklist" ) ).blocklist;
-		if ( blocklist ) {
-			window.document.getElementById( "category" ).values = blocklist.category;
-			window.document.getElementById( "type" ).values = blocklist.subcategory;
-			window.document.getElementById( "tags" ).values = blocklist.tags;
-			window.document.getElementById( "title" ).values = blocklist.title;
-			window.document.getElementById( "description" ).values = blocklist.description;
+		if ( ! blocklist ) {
+			// Here's a good starter
+			blocklist = ( new FuraffinityProfile( ) ).blocklist;
+			blocklist.subcategory = [ "Fat Furs" , "Paws" ];
+			blocklist.tags = [ "vore" , "feet" , "diaper" , "diapers" ];
+			blocklist.title = [ "feet" , "diaper" ];
+			browser.storage.sync.set( { "blocklist" : blocklist } ) 
 		}
+		window.document.getElementById( "category" ).values = blocklist.category;
+		window.document.getElementById( "type" ).values = blocklist.subcategory;
+		window.document.getElementById( "tags" ).values = blocklist.tags;
+		window.document.getElementById( "title" ).values = blocklist.title;
+		window.document.getElementById( "description" ).values = blocklist.description;
 
 		// Run updates of settings
 		let elements = window.document.getElementsByTagName( "*" );

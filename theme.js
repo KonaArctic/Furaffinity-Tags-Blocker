@@ -44,9 +44,16 @@ window.customElements.define( "panel-right" , kona_panel_right );
 class kona_input_tags extends HTMLElement {
 	constructor ( ) {
 		super( );
+
+		let check = window.document.createElement( "input-tags-check" );
+		check.innerHTML = "✔";
+		check.style.color = "green";
+		check.style.display = "inline";
+		this.appendChild( check );
 	}
 
 	append( content ) {
+		content = content.trim( );
 		if ( content == "" ) {
 			return
 		}
@@ -99,17 +106,21 @@ class kona_input_tags_entry extends kona_input_tags {
 	constructor ( ) {
 		super( );
 
+		let parent = this;
 		let entry = window.document.createElement( "input" );
 		entry.style.display = "inline";
-		entry.addEventListener( "keyup" , ( event => ( event.keyCode == 13 ) && this.append( entry.value ) ) ); 
-		this.appendChild( entry );
+		entry.addEventListener( "keyup" , function( event ) {
+			if ( event.keyCode == 13 ) {
+				parent.append( entry.value );
+				entry.value = "";
+			}
+		} ); 
+		this.prepend( entry );
 
-		let check = window.document.createElement( "input-tags-check" );
-		check.innerHTML = "✔";
-		check.style.color = "green";
-		check.style.display = "inline";
-		check.addEventListener( "click" , ( event => this.append( entry.value ) ) );
-		this.appendChild( check );
+		this.children[ 1 ].addEventListener( "click" , function( event ) {
+			parent.append( entry.value );
+			entry.value = "";
+		} );
 	}
 }
 
@@ -121,14 +132,10 @@ class kona_input_tags_select extends kona_input_tags {
 		select.style.display = "inline";
 		( Array.from( this.getElementsByTagName( "optgroup" ) ) ).forEach( option => select.appendChild( option ) );
 		( Array.from( this.getElementsByTagName( "option" ) ) ).forEach( option => select.appendChild( option ) );
-		this.appendChild( select );
+		select.addEventListener( "input" , ( event => this.append( select.selectedOptions[ 0 ].innerHTML ) ) );
+		this.prepend( select );
 
-		let check = window.document.createElement( "input-tags-check" );
-		check.innerHTML = "✔";
-		check.style.color = "green";
-		check.style.display = "inline";
-		check.addEventListener( "click" , ( event => this.append( select.selectedOptions[ 0 ].innerHTML ) ) );
-		this.appendChild( check );
+		this.children[ 1 ].addEventListener( "click" , ( event => this.append( select.selectedOptions[ 0 ].innerHTML ) ) );
 	}
 }
 
