@@ -6,8 +6,9 @@ Screw the inflation / diaper / feet porn!
 
 Issues
 ------
-- SFWify may behave slowly to avoid triggering Furaffinity's (possibly anti-DDoS) rate limit system. A fix is being worked on. Right now using prefetch and waiting helps.
-- Some users improperly tag or provide no tags to their submissions. Try blocking that user.
+-	SFWify may behave slowly to avoid triggering Furaffinity's (possibly anti-DDoS) rate limit system. A fix is being worked on. Right now using prefetch and waiting helps.
+-	Some users improperly tag or provide no tags to their submissions. Try blocking that user.
+-	buggy
 
 Install
 -------

@@ -10,7 +10,7 @@ class FuraffinityAPI {
 		/* Caches goes here */
 		this.cacheSubmission = { };
 	}
-API
+
 	//
 	// Gets any page from Furaffinity, honouring rate limits.
 	async getPage( request ) {
@@ -34,11 +34,7 @@ API
 
 		// Download
 		let response = null;
-		try {
-			response = await fetch( request );
-		} catch( error ) {
-			throw error;
-		}
+		response = await fetch( request );
 
 		// Check response, redo request if rate limited
 		if ( response.status == 503 ) {
@@ -109,7 +105,6 @@ API
 			page = [
 				document.getElementById( "gallery-gallery" ) ,
 			];
-
 
 		// Or gallery page or scraps
 		} else if ( html.getElementById( "gallery-gallery" ) ) {
@@ -261,7 +256,7 @@ API
 
 		// or favorites
 		} else if ( html.getElementById( "gallery-favorites" ) ) {
-			let href = window.document.getElementsByClassName( "pagination" )[ 0 ].getElementsByClassName( "right" )[ 0 ].href;
+			let href = html.getElementsByClassName( "pagination" )[ 0 ].getElementsByClassName( "right" )[ 0 ].href;
 			return new Request( href , { credentials: "include" , referrerPolicy: "no-referrer" } );	
 
 		// None of the above
