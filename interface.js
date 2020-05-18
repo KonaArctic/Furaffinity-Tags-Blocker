@@ -245,14 +245,14 @@ class FuraffinityAPI {
 			body.set( "page" , page + 1 );
 
 		// browse page,
-		} else if ( html.getElementsByClassName( "browse-content" ) ) {
+		} else if ( html.getElementsByClassName( "browse-content" ).length ) {
 			form = html.getElementsByClassName( "browse-content" )[ 0 ].getElementsByClassName( "navigation" )[ 0 ].children[ 2 ].children[ 0 ];
 			body = new URLSearchParams( new FormData( form ) );
 
 		// gallery,
-		} else if ( html.getElementsByClassName( "submission-list" ) ) {
+		} else if ( html.getElementsByClassName( "submission-list" ).length ) {
 			form = html.getElementsByClassName( "submission-list" )[ 0 ].children[ 0 ].children[ 2 ].getElementsByTagName( "form" )[ 0 ];
-			body = "";
+			body = undefined;
 
 		// or favorites
 		} else if ( html.getElementById( "gallery-favorites" ) ) {

@@ -21,7 +21,7 @@
 		blocklist.subcategory = [ "Fat Furs" , "Paws" ];
 		blocklist.tags = [ "vore" , "feet" , "diaper" , "diapers" ];
 		blocklist.title = [ "feet" , "diaper" ];
-		await browser.storage.sync.set( { "blocklist" : blocklist } ) 
+		browser.storage.sync.set( { "blocklist" : blocklist } ) 
 	}
 
 	// Get list of previews
