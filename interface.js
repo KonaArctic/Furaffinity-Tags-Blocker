@@ -196,7 +196,7 @@ class FuraffinityAPI {
 		}
 		let description = response.getElementsByClassName( "submission-description" )[ 0 ];
 		if ( description ) {
-			submission.description = description.innerHTML;
+			submission.description = description.innerHTML.trim( );
 		}
 
 		// Thumbnail and link

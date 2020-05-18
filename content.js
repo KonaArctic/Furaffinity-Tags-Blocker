@@ -4,7 +4,7 @@
 ( async function ( ) {
 	//
 	// Checks if each preview on a page should be hidden
-
+try{
 	// Creates required objects
 	let api = new FuraffinityAPI( );
 	let profile = new FuraffinityProfile( );
@@ -68,6 +68,7 @@
 			await browser.storage.local.set( { "cacheSubmission": api.cacheSubmission } );
 		}	
 	}
+}catch(e){alert(e);}
 } )( );
 
 

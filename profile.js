@@ -39,12 +39,12 @@ class FuraffinityProfile {
 		}
 		
 		// Title
-		if ( this.blocklist.title.some( title => submission.title.match( new RegExp( "\\b" + title + "\\b" , "i" ) ) ) ) {
+		if ( submission.title && this.blocklist.title.some( title => submission.title.match( new RegExp( "\\b" + title + "\\b" , "i" ) ) ) ) {
 			return false;
 		}
 		
 		// And description
-		if ( this.blocklist.description.some( description => submission.description.match( new RegExp( "\\b" + description + "\\b" , "i" ) ) ) ) {
+		if ( submission.description && this.blocklist.description.some( description => submission.description.match( new RegExp( "\\b" + description + "\\b" , "i" ) ) ) ) {
 			return false;
 		}
 
