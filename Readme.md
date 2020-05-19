@@ -28,3 +28,7 @@ Firefox:
 TODO
 ----
 -	Implement edge caching servers to improve speed
+
+Misc.
+-----
+SFWify is unofficial and unaffiliated with Ferrox Arts Inc.
