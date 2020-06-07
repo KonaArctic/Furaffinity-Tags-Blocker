@@ -2,11 +2,9 @@
 // TODO:
 
 ( async function ( ) {
-//try{
 	//
-	// Checks if each preview on a page should be hidden
-
 	// Creates required objects
+
 	let api = new FuraffinityAPI( );
 	let profile = new FuraffinityProfile( );
 	let cacheSubmission = ( await browser.storage.local.get( "cacheSubmission" ) ).cacheSubmission;
@@ -25,8 +23,31 @@
 		browser.storage.sync.set( { "blocklist" : blocklist } ) 
 	}
 
+	// Terminate of turned off
+	if ( ! ( await browser.storage.sync.get( "settings" ) ).settings.master ) {
+		return;
+	}
+
 	// Get list of previews
 	let previews = await api.getPreviews( window.document );
+
+	// Save at quit
+	window.addEventListener( "beforeunload", function( event ) {
+		browser.storage.local.set( { "cacheSubmission": api.cacheSubmission } );
+	} );
+
+	//
+	// Discard unused cache
+	if ( ! ( await browser.storage.sync.get( "settings" ) ).settings.caching ) {
+		let cache = { };
+		for ( preview of previews ) {
+			cache[ preview.number ] = api.cacheSubmission[ preview.number ];
+		}
+		api.cacheSubmission = cache;
+	}
+
+	//
+	// Checks if each preview on a page should be hidden
 
 	// For every preview
 	for ( preview of previews ) {
@@ -37,7 +58,6 @@
 	}
 
 	for ( preview of previews ) {
-
 		// Make sure it's still around
 		if ( ! preview.element ) {
 			continue
@@ -54,8 +74,6 @@
 				preview.destroy( );
 			}
 
-			// FIXME: this might be a bad way to operate caching
-			browser.storage.local.set( { "cacheSubmission": api.cacheSubmission } );
 		}
 	}
 
@@ -66,10 +84,9 @@
 		prefetches = await api.getPreviews( prefetches );
 		for ( prefetch of prefetches ) {
 			await api.getSubmission( prefetch );
-			await browser.storage.local.set( { "cacheSubmission": api.cacheSubmission } );
 		}	
 	}
-//}catch(e){alert(e);}
+
 } )( );
 
 

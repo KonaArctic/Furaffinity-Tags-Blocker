@@ -8,7 +8,7 @@
 	"version": "0.3.2",
 
 	"icons": {
-		"32": "icon.png"
+		"64": "icon.png"
 	},
 
 	"content_scripts": [
@@ -28,10 +28,16 @@
 	"permissions": [
 		"*://www.furaffinity.net/*",
 		"storage",
-		"unlimitedStorage"
+		"unlimitedStorage",
+		"declarativeContent"
 	],
 
-	"browser_action": {
+	"background": {
+		"scripts": [ "background.js" ],
+		"persistent": false
+	},
+
+	"page_action": {
 		"default_title": "SFWify",
 		"default_icon": "icon.png",
 		"default_popup": "popup.html",

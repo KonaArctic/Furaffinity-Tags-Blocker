@@ -3,9 +3,22 @@ window.document.addEventListener( "DOMContentLoaded" , function ( event ) {
 
 		// Grab existing settings
 		let settings = ( await browser.storage.sync.get( "settings" ) ).settings;
-		if ( settings ) {
-			window.document.getElementById( "prefetch" ).checked = settings.prefetch;
+		if ( ! settings ) {
+			settings = { };
+			settings.master = true;
+			settings.caching = true;
+			settings.prefetch = true;
 		}
+		settings.update = function( ) {
+			browser.storage.sync.set( {
+				"settings": {
+					master: this.master,
+					prefetch: this.prefetch,
+					caching: this.caching,
+				}
+			} );
+		}
+
 		let blocklist = ( await browser.storage.sync.get( "blocklist" ) ).blocklist;
 		if ( ! blocklist ) {
 			// Here's a good starter
@@ -35,25 +48,56 @@ window.document.addEventListener( "DOMContentLoaded" , function ( event ) {
 					species: [ ],
 					gender: [ ],
 				} } );
-				browser.storage.sync.set( {
-					"settings": {
-						prefetch: window.document.getElementById( "prefetch" ).checked,
-					}
-				} );
 			} );
 		}
 
-		// Don't forget caching UI
-		let cachesize = window.document.getElementById( "cachesize" )
-		if ( browser.storage.local.getBytesInUse ) {
-			cachesize.innerHTML = ( await browser.storage.local.getBytesInUse( "cacheSubmission" ) / 1000 / 1000 ).toFixed( 2 );
-		} else {
-			cachesize.innerHTML = ( JSON.stringify( await browser.storage.local.get( "cacheSubmission" ) ).length / 1000 / 1000 ).toFixed( 2 );
+		// Toggle master switch (I write too much messy code)
+		let master = window.document.getElementById( "masterswitch" );
+		master_set = function( bool ) {
+			if ( ! bool ) {
+				window.document.getElementById( "masterswitch-image" ).style.filter = "grayscale( 100% )";
+				window.document.getElementById( "masterswitch-text" ).innerHTML = "filter disabled";
+				settings.master = false;
+				settings.update( );
+			} else {
+				window.document.getElementById( "masterswitch-image" ).style.filter = "grayscale( 0% )";
+				window.document.getElementById( "masterswitch-text" ).innerHTML = "filter enabled";
+				settings.master = true;
+				settings.update( );
+			}
 		}
-		window.document.getElementById( "caching" ).addEventListener( "click" , function( event ) {
-			browser.storage.local.set( { "cacheSubmission": { } } );
-			cachesize.innerHTML = "0.00";
+		master.addEventListener( "click" , function( event ) {
+			master_set( ! settings.master )
 		} );
+		master_set( settings.master )
+
+		// Prefetch option
+		let prefetch = window.document.getElementById( "prefetch" );
+		prefetch.addEventListener( "click" , function( event ) {
+			settings.prefetch = prefetch.checked
+			settings.update( );
+		} );
+		prefetch.checked = settings.prefetch;
+
+		// Don't forget caching UI
+		if ( settings.caching ) {
+			let cachesize = window.document.getElementById( "cachesize" )
+			if ( browser.storage.local.getBytesInUse ) {
+				cachesize.innerHTML = ( await browser.storage.local.getBytesInUse( "cacheSubmission" ) / 1000 / 1000 ).toFixed( 2 );
+			} else {
+				cachesize.innerHTML = ( JSON.stringify( await browser.storage.local.get( "cacheSubmission" ) ).length / 1000 / 1000 ).toFixed( 2 );
+			}
+		} else {
+			cachesize.innerHTML = "0.00";
+		}
+		let caching = window.document.getElementById( "caching" );
+		caching.addEventListener( "click" , function( event ) {
+			cachesize.innerHTML = "0.00";
+			settings.caching = caching.checked;
+			settings.update( );
+		} );
+		caching.checked = settings.caching;
+
 	} )( );
 } );
 

@@ -18,12 +18,17 @@
 			<header-3 centre>
 				SFWify
 			</header-3>
-
-			<segment style="display: none;" id=masterswitch>
-				<!-- TODO: master switch goes here -->
-			</segment>
-
-			<paragraph centre block>
+			<div id=masterswitch>
+				<center>
+					<image src=icon.png id=masterswitch-image style="filter:grayscale( 100% ); transition:filter 0.8s;">
+					<p>
+						<muted id=masterswitch-text>
+							filter enabled
+						</muted>
+					</p>
+				</center>
+			</div>
+			<paragraph centre style="padding-bottom: 1em;">
 				Block FA submissions <br/>with any of:
 			</paragraph>
 
@@ -163,7 +168,7 @@
 			<header-6 noblock inline>
 				Caching
 			</header-6>
-			<input type=button inline id=caching value="clear all" />
+			<input type=checkbox inline id=caching />
 			</input>
 			<paragraph>
 				<muted>Improve performance by using <br/>disk space. Using <span id=cachesize>(error)</span> Mb.</muted>
