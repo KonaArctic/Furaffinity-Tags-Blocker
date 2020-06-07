@@ -18,7 +18,7 @@
 			<header-3 centre>
 				SFWify
 			</header-3>
-			<div id=masterswitch>
+			<div id=masterswitch style="cursor: pointer;">
 				<center>
 					<image src=icon.png id=masterswitch-image style="filter:grayscale( 100% ); transition:filter 0.8s;">
 					<p>
@@ -173,11 +173,22 @@
 			<paragraph>
 				<muted>Improve performance by using <br/>disk space. Using <span id=cachesize>(error)</span> Mb.</muted>
 			</paragraph>
-			<paragraph centre>
-				2020 AKona <a href="https://terms.akona.me">Terms & Privacy</a> 
+			<header-6 noblock inline>
+				Info required
+			</header-6>
+			<input type=checkbox inline id="tagsrequired" />
+			</input>
+			<paragraph>
+				<muted>Block submissions that I can't <br/>access or don't have any tags.</muted>
 			</paragraph>
 			<paragraph centre>
-				<a href="https://patreon.akona.me">More goodies ⇛ Patreon</a>
+				2020 AKona <a href="https://terms.akona.me" target="_blank">Terms & Privacy</a> 
+			</paragraph>
+			<paragraph centre>
+				<a href="https://patreon.akona.me" target="_blank">More goodies ⇛ Patreon</a>
+			</paragraph>
+			<paragraph id=update style="display:none;">
+				There's a <a href="https://sfwify.akona.me/update" target="_blank">new version</a> of SFWify.
 			</paragraph>
 		</segment>
 	</body>

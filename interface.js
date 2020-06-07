@@ -95,6 +95,13 @@ class FuraffinityAPI {
 					previews[ i ].number = ( new URL( page[ i ].getElementsByTagName( "a" )[ 0 ].href , "https://furaffinity.net" ) ).pathname.split( "/" )[ 2 ];
 					previews[ i ].title = page[ i ].getElementsByTagName( "figcaption" )[ 0 ].getElementsByTagName( "a" )[ 0 ].innerHTML;
 					previews[ i ].author = page[ i ].getElementsByTagName( "figcaption" )[ 0 ].getElementsByTagName( "a" )[ 1 ].innerHTML;
+					if ( page[ i ].classList.contains( "r-adult" ) ) {
+						previews[ i ].rating = "adult";
+					} else if ( page[ i ].classList.contains( "r-mature" ) ) {
+						previews[ i ].rating = "mature";
+					} else {
+						previews[ i ].rating = "general";
+					}
 				}
 
 				// Done
@@ -121,6 +128,13 @@ class FuraffinityAPI {
 					previews[ i ].number = ( new URL( page[ i ].getElementsByTagName( "a" )[ 0 ].href , "https://furaffinity.net" ) ).pathname.split( "/" )[ 2 ];
 					previews[ i ].title = page[ i ].getElementsByTagName( "figcaption" )[ 0 ].getElementsByTagName( "a" )[ 0 ].innerHTML;
 					previews[ i ].author = "";	// I'm not gonna block a user on their own gallery/scraps page
+					if ( page[ i ].classList.contains( "r-adult" ) ) {
+						previews[ i ].rating = "adult";
+					} else if ( page[ i ].classList.contains( "r-mature" ) ) {
+						previews[ i ].rating = "mature";
+					} else {
+						previews[ i ].rating = "general";
+					}
 				}
 
 				// Done
@@ -168,8 +182,20 @@ class FuraffinityAPI {
 			response = await this.getPage( "/view/" + request );
 		}
 
+		// Can I see this page?
+		let permission = response.getElementsByClassName( "notice-message" )[ 0 ];
+		if ( permission && ( permission.innerText == "System Message\n\nThe owner of this page has elected to make it available to registered users only.\nTo view the contents of this page please log in or create an account.\n\nContinue »" || permission.innerText == "System Message\nThis submission contains Mature or Adult content. To view this submission you must log in and enable the Mature or Adult content via Account Settings." ) ) {
+			submission.permission = false;
+		}
+
+		// Rating
+		let rating = response.querySelector( "meta[property=\"twitter:data2\"]" );
+		if ( rating ) {
+			submission.rating = rating.getAttribute( "content" ).toLowerCase( );
+		}
+
 		// Info strings
-		let info = response.getElementsByClassName( "info" )[ 0 ]
+		let info = response.getElementsByClassName( "info" )[ 0 ];
 		if ( info ) {
 			submission.category = info.getElementsByClassName( "category-name" )[ 0 ].innerHTML;
 			submission.subcategory = info.getElementsByClassName( "type-name" )[ 0 ].innerHTML;
@@ -186,17 +212,16 @@ class FuraffinityAPI {
 		}
 
 		// Author, title, and description
-		let subcontainer = response.getElementsByClassName( "submission-id-sub-container" )[ 0 ];
-		if ( subcontainer ) {
-			submission.author = subcontainer.children[ 1 ].children[ 0 ].innerHTML;
-		}
 		let title = response.querySelector( "meta[property=\"og:title\"]" );
 		if ( title ) {
-			title.getAttribute( "content" );
+			title = title.getAttribute( "content" ).split( " " );
+			submission.author = title.pop( );
+			title.pop( );
+			submission.title = title.join( " " );
 		}
-		let description = response.getElementsByClassName( "submission-description" )[ 0 ];
+		let description = response.querySelector( "meta[property=\"og:description\"]" );
 		if ( description ) {
-			submission.description = description.innerHTML.trim( );
+			submission.description = description.getAttribute( "content" );
 		}
 
 		// Thumbnail and link
@@ -209,7 +234,7 @@ class FuraffinityAPI {
 		}
 
 		// Also, store in cache if possible
-		// On some browsers the browser.storage API is picky: it cannot store objects like HTML elements or methods. https://bugzilla.mozilla.org/show_bug.cgi?id=1370884
+		// On some browsers the browser.storage API is picky: it cannot store objects like HTML elements or methods. https://bugzilla.mozilla.org/show_bug.cgi?id=1370884 FIXME: Already implemented in content.js
 		if ( submission.number ) {
 			this.cacheSubmission[ submission.number ] = { };
 			for ( let key of [ "number" , "thumbnail" , "link" , "author" , "title" , "category" , "subcategory" , "species" , "gender" , "tags" , "description" , "rating" ] ) {
@@ -279,9 +304,10 @@ class FuraffinityAPI {
 FuraffinityAPI.Submission = class {
 	constructor( ) {
 		this.element = null;
-		this.number = 1;
+		this.number = null;
 		this.thumbnail = null;
 		this.link = null;
+		this.rating = null;
 		this.author = null;
 		this.title = null;
 		this.category = null;
@@ -290,15 +316,23 @@ FuraffinityAPI.Submission = class {
 		this.gender = null;
 		this.tags = [ ];
 		this.description = null;
-		this.rating = null;
+		this.permission = true;
+		this.hidden = false;
 	}
 
 	destroy( ) {
-		if ( this.element ) {
+		if ( ! this.hidden ) {
 			this.element.remove( );
+			this.hidden = true;
 
 			// For some pages, somehow triggering a resize helps layout
 			window.dispatchEvent( new Event( "resize" ) );
+		}
+	}
+
+	recover( ) {
+		if ( this.hidden ) {
+			// Not yet implemented
 		}
 	}
 }

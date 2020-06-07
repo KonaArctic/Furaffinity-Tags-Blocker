@@ -3,31 +3,19 @@ window.document.addEventListener( "DOMContentLoaded" , function ( event ) {
 
 		// Grab existing settings
 		let settings = ( await browser.storage.sync.get( "settings" ) ).settings;
-		if ( ! settings ) {
-			settings = { };
-			settings.master = true;
-			settings.caching = true;
-			settings.prefetch = true;
-		}
 		settings.update = function( ) {
 			browser.storage.sync.set( {
 				"settings": {
 					master: this.master,
 					prefetch: this.prefetch,
 					caching: this.caching,
+					tags: this.tags,
 				}
 			} );
+			browser.tabs.executeScript( { file: "/content.js" } ); 
 		}
 
 		let blocklist = ( await browser.storage.sync.get( "blocklist" ) ).blocklist;
-		if ( ! blocklist ) {
-			// Here's a good starter
-			blocklist = ( new FuraffinityProfile( ) ).blocklist;
-			blocklist.subcategory = [ "Fat Furs" , "Paws" ];
-			blocklist.tags = [ "vore" , "feet" , "diaper" , "diapers" ];
-			blocklist.title = [ "feet" , "diaper" ];
-			browser.storage.sync.set( { "blocklist" : blocklist } ) 
-		}
 		window.document.getElementById( "category" ).values = blocklist.category;
 		window.document.getElementById( "type" ).values = blocklist.subcategory;
 		window.document.getElementById( "tags" ).values = blocklist.tags;
@@ -35,8 +23,10 @@ window.document.addEventListener( "DOMContentLoaded" , function ( event ) {
 		window.document.getElementById( "description" ).values = blocklist.description;
 
 		// Run updates of settings
-		let elements = window.document.getElementsByTagName( "*" );
-		for ( let i = 0 ; i < elements.length ; i ++ ) {
+		let elements = [ ];
+		elements.push( ... window.document.getElementsByTagName( "input-tags-select" ) );
+		elements.push( ... window.document.getElementsByTagName( "input-tags-entry" ) );
+		for ( let i = 0 ; i < elements.length ; i ++ ) {	// FIXME
 			elements[ i ].addEventListener( "change" , function( event ) {
 				browser.storage.sync.set( { "blocklist": {
 					category: window.document.getElementById( "category" ).values,
@@ -48,6 +38,7 @@ window.document.addEventListener( "DOMContentLoaded" , function ( event ) {
 					species: [ ],
 					gender: [ ],
 				} } );
+				browser.tabs.executeScript( { file: "/content.js" } ); 
 			} );
 		}
 
@@ -79,6 +70,14 @@ window.document.addEventListener( "DOMContentLoaded" , function ( event ) {
 		} );
 		prefetch.checked = settings.prefetch;
 
+		// Tag option
+		let tagsrequired = window.document.getElementById( "tagsrequired" );
+		tagsrequired.addEventListener( "click" , function( event ) {
+			settings.tags = tagsrequired.checked
+			settings.update( );
+		} );
+		tagsrequired.checked = settings.tags;
+
 		// Don't forget caching UI
 		if ( settings.caching ) {
 			let cachesize = window.document.getElementById( "cachesize" )
@@ -98,6 +97,16 @@ window.document.addEventListener( "DOMContentLoaded" , function ( event ) {
 		} );
 		caching.checked = settings.caching;
 
+		// Check updates (Chrome only)
+		try {
+			let update = await fetch( "https://cors.akona.me/https://sfwify.akona.me/chrome-update" );
+			update = await update.text( );
+			if ( update > 0 ) {
+				window.document.getElementById( "update" ).style.display = "block";
+			}
+		} catch( error ) {
+
+		}
 	} )( );
 } );
 

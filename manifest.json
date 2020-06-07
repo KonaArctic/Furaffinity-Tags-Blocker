@@ -5,7 +5,7 @@
 	"name": "SFWify",
 	"description": "Blocks p0rn on Furaffinity",
 	"homepage_url": "https://sfwify.akona.me/",
-	"version": "0.3.2",
+	"version": "0.4.2",
 
 	"icons": {
 		"64": "icon.png"
