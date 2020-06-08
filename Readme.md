@@ -30,6 +30,7 @@ Firefox:
 
 TODO
 ----
+- Fix mobile version
 -	Implement edge caching servers to improve speed
 
 Misc.
