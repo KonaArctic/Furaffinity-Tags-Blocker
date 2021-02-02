@@ -1,5 +1,7 @@
 SFWify
 ======
+Notice: [FA is officially developing a filtering system.](https://furaffinity.net/journals/fender/9761295) This add-on is now officially depreciated.
+
 Browser addon that prevents submissions meeting an user criteria from appearing on the Furaffinity home, browse, or search pages.
 
 Screw the inflation / diaper / feet porn!
