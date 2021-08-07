@@ -1,6 +1,6 @@
 SFWify
 ======
-Notice: [FA is officially developing a filtering system.](https://furaffinity.net/journal/9761295) This add-on is now officially depreciated.
+~~Notice: [FA is officially developing a filtering system.](https://furaffinity.net/journal/9761295) This add-on is now officially depreciated.~~ I haven't heard about it since :(.
 
 Edit: FurAffinity's ratelimit can now be bypassed with [https://furaffinity-ratelimit.akona.me/](https://furaffinity-ratelimit.akona.me/). Find out how it works on my blog.
 
@@ -39,4 +39,4 @@ TODO
 
 Misc.
 -----
-SFWify is unofficial and unaffiliated with Ferrox Arts Inc.
+SFWify is unofficial and unaffiliated with Frost Dragon Art LLC.
